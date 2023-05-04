@@ -12,3 +12,74 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2532b999613e32b4685de0c2490b5036, type: 3}
   m_Name: CardDatabase
   m_EditorClassIdentifier: 
+  cardDatabase:
+  - id: 0
+  - id: 1
+  - id: 2
+  - id: 3
+  - id: 4
+  enemyMaterial: {fileID: 2100000, guid: 7653a410e7106bf448aac8c81b191487, type: 2}
+  characterMaterial: {fileID: 2100000, guid: 7653a410e7106bf448aac8c81b191487, type: 2}
+  references:
+    version: 1
+    00000000:
+      type: {class: Card_Enemy, ns: , asm: Assembly-CSharp}
+      data:
+        Identifier: Suspended
+        name: Suspended
+        cardType: 6
+        material: {fileID: 0}
+        portrait: {fileID: 2800000, guid: 21172887dcbc33c44bdccc195d798cab, type: 3}
+        BackgroundID: 0
+        effect: 0
+        effectText: 
+        damage: 0
+        health: 100
+        decorations: 3
+    00000001:
+      type: {class: Card_Enemy, ns: , asm: Assembly-CSharp}
+      data:
+        Identifier: Shib
+        name: Shib
+        cardType: 6
+        material: {fileID: 0}
+        portrait: {fileID: 2800000, guid: 1910df4599828d24b8f378b34d877efc, type: 3}
+        BackgroundID: 0
+        effect: 0
+        effectText: 
+        damage: 0
+        health: 1
+        decorations: 1
+    00000002:
+      type: {class: Card_Ammo, ns: , asm: Assembly-CSharp}
+      data:
+        Identifier: AmmoX30
+        name: Ammo X30
+        cardType: 1
+        material: {fileID: 0}
+        portrait: {fileID: 0}
+        BackgroundID: 0
+        Ammo: 30
+        Gold: 30
+    00000003:
+      type: {class: Card_Ammo, ns: , asm: Assembly-CSharp}
+      data:
+        Identifier: AmmoX60
+        name: Ammo X60
+        cardType: 1
+        material: {fileID: 0}
+        portrait: {fileID: 0}
+        BackgroundID: 0
+        Ammo: 30
+        Gold: 30
+    00000004:
+      type: {class: Card_Ammo, ns: , asm: Assembly-CSharp}
+      data:
+        Identifier: AmmoX90
+        name: Ammo X90
+        cardType: 1
+        material: {fileID: 0}
+        portrait: {fileID: 0}
+        BackgroundID: 0
+        Ammo: 30
+        Gold: 30

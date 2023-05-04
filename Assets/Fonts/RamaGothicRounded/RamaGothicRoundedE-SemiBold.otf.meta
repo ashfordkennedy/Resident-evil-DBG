@@ -1,0 +1,29 @@
+fileFormatVersion: 2
+guid: d8bb9f91de48c9145a0f7d669dfafe43
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Rama Gothic Rounded
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 6334a6008014a8d488208a28eb72afec, type: 3}
+  - {fileID: 12800000, guid: f68b2ab800c8beb47a3dcce3b5693284, type: 3}
+  - {fileID: 12800000, guid: c0a609045c043e54fbb5cd7a85d16524, type: 3}
+  - {fileID: 12800000, guid: 180c569ab92a77f47bfec790adb06969, type: 3}
+  - {fileID: 12800000, guid: 45bb19fe229980740b36d46455b1f1b1, type: 3}
+  - {fileID: 12800000, guid: 0076946297361eb41b49a810b1685c41, type: 3}
+  - {fileID: 12800000, guid: b205ba5b75a1cbd409233036f0adf0d2, type: 3}
+  - {fileID: 12800000, guid: a09254de87543e34da2e4bfa0e234310, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEditor.UI;
 using UnityEditor;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
 public class Mesh_Interactable : Selectable
 {
@@ -14,6 +15,10 @@ public class Mesh_Interactable : Selectable
     public bool selected = false;
     [SerializeField]Renderer meshRenderer;
     public bool InteractableOverride = false;
+
+    public UnityEvent OnLeftClick = new UnityEvent();
+    public UnityEvent OnMiddleClick = new UnityEvent();
+    public UnityEvent OnRightClick = new UnityEvent();
 
     public override bool IsInteractable()    
     {
@@ -74,7 +79,31 @@ public class Mesh_Interactable : Selectable
         EditorDeselect();
     }
 
-    
+    private void OnMouseDown()
+    {
+        OnPointerDown(new PointerEventData(EventSystem.current));
+    }
+
+    public override void OnPointerDown(PointerEventData eventData)
+    {
+        print("Pointer down firing");
+        base.OnPointerDown(eventData);
+        switch (eventData.button)
+        {
+            case PointerEventData.InputButton.Left:
+                OnLeftClick.Invoke();
+                break;
+            case PointerEventData.InputButton.Middle:
+                OnMiddleClick.Invoke();
+                break;
+            case PointerEventData.InputButton.Right:
+                OnRightClick.Invoke();
+                break;
+
+        }
+    }
+
+
 
     #endregion
 
@@ -105,11 +134,19 @@ public class Mesh_Interactable_Editor : SelectableEditor
 
     internal SerializedProperty m_SelectedMaterial;
     internal SerializedProperty m_Renderer;
+
+    internal SerializedProperty m_LeftClickEvent;
+    internal SerializedProperty m_RightClickEvent;
+    internal SerializedProperty m_MiddleClickEvent;
+
     protected override void OnEnable()
     {
         base.OnEnable();
         m_SelectedMaterial = serializedObject.FindProperty("SelectedMaterial");
         m_Renderer = serializedObject.FindProperty("meshRenderer");
+        m_LeftClickEvent = serializedObject.FindProperty("OnLeftClick");
+        m_RightClickEvent = serializedObject.FindProperty("OnRightClick");
+        m_MiddleClickEvent = serializedObject.FindProperty("OnMiddleClick");
     }
    
 
@@ -117,8 +154,12 @@ public class Mesh_Interactable_Editor : SelectableEditor
     {
         var Target = target as Mesh_Interactable;
         base.OnInspectorGUI();
+
         EditorGUILayout.PropertyField(m_SelectedMaterial);
         EditorGUILayout.PropertyField(m_Renderer);
+        EditorGUILayout.PropertyField(m_LeftClickEvent);
+        EditorGUILayout.PropertyField(m_RightClickEvent);
+        EditorGUILayout.PropertyField(m_MiddleClickEvent);
         serializedObject.ApplyModifiedProperties();
     }
 

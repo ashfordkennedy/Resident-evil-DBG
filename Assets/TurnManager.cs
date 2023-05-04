@@ -16,7 +16,7 @@ public class TurnManager : MonoBehaviour
     /// </summary>
     public void RestoreInventory()
     {
-
+        targetPlayer.RestockInventory();
     }
 
 

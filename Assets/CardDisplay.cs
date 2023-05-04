@@ -294,17 +294,21 @@ public class CardDisplay : MonoBehaviour
 
     private void OnValidate()
     {
-        SetInteractable(interactable);
-        if (autoUpdate == true) {
-            OrganiseCards(offset, _cardWidth, _cardHeight, _cardDepth, displayOrientation, radialFill);
-            RotateCards(rotation);
-
-            
-            if (displayOrientation != DisplayOrientation.stacked)
+        if (transform.childCount > 0)
+        {
+            SetInteractable(interactable);
+            if (autoUpdate == true)
             {
-                SetVerticalOffset(_verticalOffset);
+                OrganiseCards(offset, _cardWidth, _cardHeight, _cardDepth, displayOrientation, radialFill);
+                RotateCards(rotation);
+
+
+                if (displayOrientation != DisplayOrientation.stacked)
+                {
+                    SetVerticalOffset(_verticalOffset);
+                }
+
             }
-            
         }
         
     }
@@ -340,48 +344,58 @@ public class CardDisplay : MonoBehaviour
 
     public IEnumerator RepositionAnimation(float duration = 2f, float zRotation = 0)
     {
-        List<Vector3> Positions = new List<Vector3>();
-        switch (displayOrientation)
+        print("playing reposition animation on " + this.gameObject.name);
+        if (this.transform.childCount > 0)
         {
-            case DisplayOrientation.Row:
-                Positions = GenerateRowPositions();
-                break;
-
-            case DisplayOrientation.Radial:
-                Positions = GenerateRadialPositions();
-                break;
-
-            case DisplayOrientation.Column:
-                Positions = GenerateColumnPositions();
-                break;
-
-            case DisplayOrientation.Grid:
-                Positions = GenerateGridPositions();
-                break;
-
-        }
-
-
-        float startTime = Time.time;
-        float endTime = Time.time + duration;
-
-        while (Time.time < endTime)
-        {
-            float pos = Mathf.InverseLerp(startTime, endTime, Time.time);
-            for (int i = 0; i < container.childCount; i++)
+            print("reposition switch " + this.gameObject.name);
+            List<Vector3> Positions = new List<Vector3>();
+            switch (displayOrientation)
             {
-                Transform child = container.GetChild(i);
+                case DisplayOrientation.Row:
+                    Positions = GenerateRowPositions();
+                    break;
 
-                child.position = Vector3.Slerp(child.position, Positions[i], pos);
-                child.rotation = Quaternion.Euler(new Vector3(child.rotation.eulerAngles.x, child.rotation.eulerAngles.y, Mathf.Lerp(child.rotation.eulerAngles.z,zRotation,pos)));
+                case DisplayOrientation.Radial:
+                    Positions = GenerateRadialPositions();
+                    break;
+
+                case DisplayOrientation.Column:
+                    Positions = GenerateColumnPositions();
+                    break;
+
+                case DisplayOrientation.Grid:
+                    Positions = GenerateGridPositions();
+                    break;
+
+                case DisplayOrientation.stacked:
+                    print("generating stack");
+                    Positions = GenerateStackPositions();
+                    break;
+
             }
-            yield return null;
+
+
+            float startTime = Time.time;
+            float endTime = Time.time + duration;
+
+            while (Time.time <= endTime)
+            {
+                float pos = Mathf.InverseLerp(startTime, endTime, Time.time);
+                for (int i = 0; i < container.childCount; i++)
+                {
+                    Transform child = container.GetChild(i);
+
+                    child.position = Vector3.Slerp(child.position, Positions[i], pos);
+                    child.rotation = Quaternion.Euler(new Vector3(child.rotation.eulerAngles.x, child.rotation.eulerAngles.y, Mathf.Lerp(child.rotation.eulerAngles.z, zRotation, pos)));
+                }
+                yield return new WaitForEndOfFrame();
+                yield return null;
+            }
+
+
+
+
         }
-
-
-
-
-
         yield return null;
     }
 
@@ -526,6 +540,33 @@ public class CardDisplay : MonoBehaviour
         }
         return Positions;
     }
+
+
+    private List<Vector3> GenerateStackPositions()
+    {
+        List<Vector3> Positions = new List<Vector3>();
+
+        float length = ((cardDepth + offset) * container.childCount);
+        print("length = " + length + " || child count = " + container.childCount);
+
+        Vector3 startPosition = container.position;
+        Vector3 incrementPosition = startPosition;
+
+
+
+        for (int i = 0; i < container.childCount; i++)
+        {
+            Positions.Add(incrementPosition);
+            incrementPosition.y += cardDepth + offset;
+        }
+       // container.GetChild(container.childCount - 1).position = incrementPosition;
+
+
+
+        return Positions;
+    }
+
+
     #endregion
 
 
@@ -645,10 +686,47 @@ public class CardDisplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
        // OnValidate();
         if (Input.GetKeyDown(KeyCode.S))
         {
             StartCoroutine(RepositionAnimation(2,rotation));
         }
+        */
     }
+
+
+    public void DetatchAllCards(CardDisplay targetDisplay)
+    {
+        
+        int loopLength = transform.childCount;
+        print(loopLength + " cards to remove ");
+        for (int i = 0; i < loopLength; i++)
+        {
+            Transform child = transform.GetChild(0);
+            child.SetParent(targetDisplay.transform);
+            child.rotation = Quaternion.Euler(Vector3.zero);
+            print(i + " cards removed ");
+        }      
+        print("completed loop");
+        StartCoroutine(targetDisplay.RepositionAnimation(3,0));
+        SetInteractable(_interactable);
+    }
+
+
+    public void DetatchCards(CardDisplay targetDisplay, int cardCount)
+    {
+        print(transform.childCount + " cards available");
+        for (int i = 0; i < cardCount ; i++)
+        {
+            Transform child = transform.GetChild(transform.childCount - 1);
+            child.SetParent(targetDisplay.transform);
+            child.rotation = Quaternion.Euler(Vector3.zero);
+            print(i + " cards removed ");
+        }
+        print("completed loop");
+        StartCoroutine(targetDisplay.RepositionAnimation(3, 0));
+        SetInteractable(_interactable);
+    }
+
 }
